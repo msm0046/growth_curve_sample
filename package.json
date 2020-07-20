@@ -1,5 +1,7 @@
 {
   "name": "growth_curve_sample",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "chart.js": "^2.7.1"
+  }
 }
