@@ -19,10 +19,6 @@ class GrowthCurveSampleController < ApplicationController
 
   private
 
-  def generate_border_color_propertiy(generate_size:, rgba:)
-    Array.new(generate_size) { rgba }
-  end
-
   def set_gon_variable_as(key:, value:)
     gon.public_send("#{key}=", value)
   end
