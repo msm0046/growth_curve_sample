@@ -11,16 +11,14 @@ class GrowthCurveSampleController < ApplicationController
       borderBlue: BORDER_COLOR_BLUE
     }
 
-    # NOTE: chart-js で値の数だけ色指定が必要
-    border_blue = 'rgba(54, 162, 235, 1)'
-    # gon.borderBlue = Array.new(weight.size) { border_blue }
-    gon.borderBlue =
-      generate_border_color_propertiy(generate_size: weight.size, rgba: border_blue)
+    gon_set_values.each do |key, value|
+      set_gon_variable_as(key: key, value: value)
+    end
   end
 
   private
 
-  def generate_border_color_propertiy(generate_size:, rgba:)
-    Array.new(generate_size) { rgba }
+  def set_gon_variable_as(key:, value:)
+    gon.public_send("#{key}=", value)
   end
 end
