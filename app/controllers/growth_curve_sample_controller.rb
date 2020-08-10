@@ -1,4 +1,7 @@
 class GrowthCurveSampleController < ApplicationController
+  BORDER_COLOR_RED = 'rgba(255, 0, 0, 1)'.freeze
+  BORDER_COLOR_BLUE = 'rgba(54, 162, 235, 1)'.freeze
+
   def index
     growth_records = GrowthRecord.all
 
