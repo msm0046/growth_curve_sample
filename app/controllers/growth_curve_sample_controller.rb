@@ -9,8 +9,8 @@ class GrowthCurveSampleController < ApplicationController
     gon_set_values = {
       # TODO: レコードから情報を取得してグラフを描画する
       # 身長・体重のマッピング
-      height: @growth_records.map { |attr| attr.height },
-      weight: @growth_records.map { |attr| attr.weight },
+      height: growth_records.map(&:height),
+      weight: growth_records.map(&:weight),
       # 描画色の設定
       borderRed: BORDER_COLOR_RED,
       borderBlue: BORDER_COLOR_BLUE
