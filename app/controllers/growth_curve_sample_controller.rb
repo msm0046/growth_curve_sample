@@ -1,6 +1,6 @@
 class GrowthCurveSampleController < ApplicationController
-  BORDER_COLOR_RED = 'rgba(255, 0, 0, 1)'.freeze
-  BORDER_COLOR_BLUE = 'rgba(54, 162, 235, 1)'.freeze
+  BORDER_COLOR_RED  = 'rgba(255,   0,   0, 1)'.freeze
+  BORDER_COLOR_BLUE = 'rgba( 54, 162, 235, 1)'.freeze
 
   def index
     @growth_records = GrowthRecord.all
@@ -8,6 +8,7 @@ class GrowthCurveSampleController < ApplicationController
 
     gon_set_values = {
       # TODO: レコードから情報を取得してグラフを描画する
+      # 身長・体重のマッピング
       height: @growth_records.map { |attr| attr.height },
       weight: @growth_records.map { |attr| attr.weight },
       # 描画色の設定
