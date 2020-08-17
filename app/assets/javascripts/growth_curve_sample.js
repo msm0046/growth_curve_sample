@@ -10,7 +10,7 @@ window.draw_graph = function () {
     // データ
     data: {
       // X軸ラベル
-      labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      labels: [...Array(13).keys()].map(i => { return i + 'ヶ月' }), // 0 〜 12ヶ月
       // データ設定
       datasets: [
         {
