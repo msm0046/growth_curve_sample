@@ -7,7 +7,6 @@ class GrowthCurveSampleController < ApplicationController
     # TODO: 特定の子供だけの情報に絞り込んで、情報を取得する
 
     gon_set_values = {
-      # TODO: レコードから情報を取得してグラフを描画する
       # 身長・体重のマッピング
       height: @growth_records.map(&:height),
       weight: @growth_records.map(&:weight),
@@ -27,11 +26,19 @@ class GrowthCurveSampleController < ApplicationController
   # TODO: CRUD の残りの部分を作成
 
   def create
-    # 例えば こういったカタチで POST されてきたデータを、モデルに当て込む
     @growth_record = GrowthRecord.new(growth_record_params)
-    @growth_record.save # 保存する
+
+    # flash メッセージの設定
+    if @growth_record.save
+      flash[:success] = 'レコードを作成しました!'
+    else
+      flash[:error] = "レコードを作成できませんでした"
+      flash[:error_messages] = @growth_record.errors.messages
+    end
+
+    redirect_to growth_curve_sample_index_path
   end
-  
+
   private
 
   def set_gon_variable_as(key:, value:)
