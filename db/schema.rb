@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200801053522) do
+ActiveRecord::Schema.define(version: 20200815052258) do
 
   create_table "growth_records", force: :cascade do |t|
     t.float "height"
@@ -19,6 +19,12 @@ ActiveRecord::Schema.define(version: 20200801053522) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "age"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

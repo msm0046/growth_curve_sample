@@ -9,8 +9,8 @@ class GrowthCurveSampleController < ApplicationController
     gon_set_values = {
       # TODO: レコードから情報を取得してグラフを描画する
       # 身長・体重のマッピング
-      height: growth_records.map(&:height),
-      weight: growth_records.map(&:weight),
+      height: @growth_records.map(&:height),
+      weight: @rowth_records.map(&:weight),
       # 描画色の設定
       borderRed: BORDER_COLOR_RED,
       borderBlue: BORDER_COLOR_BLUE
@@ -19,6 +19,18 @@ class GrowthCurveSampleController < ApplicationController
     gon_set_values.each do |key, value|
       set_gon_variable_as(key: key, value: value)
     end
+  end
+
+  # TODO: CRUD の残りの部分を作成
+
+  # インスタンスを生成
+  # ビューに送られる
+  def new
+    @growth_record = GrowthRecord.new
+  end
+
+  def destroy
+    @growth_record.destroy
   end
 
   private
