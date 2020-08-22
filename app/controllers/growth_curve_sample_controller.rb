@@ -7,7 +7,6 @@ class GrowthCurveSampleController < ApplicationController
     # TODO: 特定の子供だけの情報に絞り込んで、情報を取得する
 
     gon_set_values = {
-      # TODO: レコードから情報を取得してグラフを描画する
       # 身長・体重のマッピング
       height: @growth_records.map(&:height),
       weight: @growth_records.map(&:weight),
@@ -26,18 +25,11 @@ class GrowthCurveSampleController < ApplicationController
 
   # TODO: CRUD の残りの部分を作成
 
-  # モーダルの中の"記録する"ボタンを押すと実行される
-  # GrowthRecordモデルのインスタンスを生成
-  def new
-    @growth_record = GrowthRecord.new
-  end
-
   def create
-    # 例えば こういったカタチで POST されてきたデータを、モデルに当て込む
     @growth_record = GrowthRecord.new(growth_record_params)
     @growth_record.save # 保存する
   end
-  
+
   private
 
   def set_gon_variable_as(key:, value:)
