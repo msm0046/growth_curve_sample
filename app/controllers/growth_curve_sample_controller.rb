@@ -26,12 +26,6 @@ class GrowthCurveSampleController < ApplicationController
 
   # TODO: CRUD の残りの部分を作成
 
-  # モーダルの中の"記録する"ボタンを押すと実行される
-  # GrowthRecordモデルのインスタンスを生成
-  def new
-    @growth_record = GrowthRecord.new
-  end
-
   def create
     # 例えば こういったカタチで POST されてきたデータを、モデルに当て込む
     @growth_record = GrowthRecord.new(growth_record_params)

@@ -30,7 +30,7 @@
         <div class="body-message">
           <%# form-horizontal...表示領域の幅に応じて、ラベルとフォーム部品を水平に並べる %>
           <%# form要素のclass属性にform-horizontalを指定する。 %>
-          <%= form_for :growth_record, url: '/growth_curve_sample/create' do |f| %>
+          <%= form_for @growth_record, url: {action: "index"} do |f| %>
 
             <div class="form-group">
               <label class="control-label col-lg-3">月齢</label>
