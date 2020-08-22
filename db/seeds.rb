@@ -9,7 +9,7 @@
 GrowthRecord.destroy_all
 
 # サンプルデータづくりのための可変データ
-growth_record_prams = {
+growth_record_params = {
   height: 20.1,
   weight: 2.0,
   age: 0, # NOTE: 年齢は変更対象にしない
@@ -19,11 +19,11 @@ growth_record_prams = {
 # GrowthRecord を 12ヶ月分作成
 12.times do |i|
   # サンプル成長記録なので単純に加算させる
-  growth_record_prams[:height] += 3.0
-  growth_record_prams[:weight] += 0.5
-  growth_record_prams[:age_of_the_moon] += 1
+  growth_record_params[:height] += 3.0
+  growth_record_params[:weight] += 0.5
+  growth_record_params[:age_of_the_moon] += 1
 
   GrowthRecord.create!(
-    growth_record_prams
+    growth_record_params
   )
 end
