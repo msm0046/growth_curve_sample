@@ -10,7 +10,7 @@ window.draw_graph = function () {
     // データ
     data: {
       // X軸ラベル
-      labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      labels: [...Array(13).keys()].map(i => { return i + 'ヶ月' }), // 0 〜 12ヶ月
       // データ設定
       datasets: [
         {
@@ -67,6 +67,7 @@ window.draw_graph = function () {
               min: 40,
               max: 80,
               stepSize: 5,
+              callback: (value, _index, _values) => { return value + 'cm' }
             },
           },
           {
@@ -82,6 +83,7 @@ window.draw_graph = function () {
               min: 1,
               max: 12,
               stepSize: 1,
+              callback: (value, _index, _values) => { return value + 'kg' }
             },
             // 横グリッドを非表示に
             gridLines: {
