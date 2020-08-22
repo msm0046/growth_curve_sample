@@ -19,13 +19,33 @@ class GrowthCurveSampleController < ApplicationController
     gon_set_values.each do |key, value|
       set_gon_variable_as(key: key, value: value)
     end
+
+    # index にフォームを書くので ここで new する
+    @growth_record = GrowthRecord.new
   end
 
   # TODO: CRUD の残りの部分を作成
 
+  # モーダルの中の"記録する"ボタンを押すと実行される
+  # GrowthRecordモデルのインスタンスを生成
+  def new
+    @growth_record = GrowthRecord.new
+  end
+
+  def create
+    # 例えば こういったカタチで POST されてきたデータを、モデルに当て込む
+    @growth_record = GrowthRecord.new(growth_record_params)
+    @growth_record.save # 保存する
+  end
+  
   private
 
   def set_gon_variable_as(key:, value:)
     gon.public_send("#{key}=", value)
+  end
+
+  def growth_record_params
+    params.require(:growth_record)
+          .permit(:age, :height, :weight, :age_of_the_moon) # ... 必要なパラメータを設定
   end
 end

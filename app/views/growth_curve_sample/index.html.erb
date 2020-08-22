@@ -30,33 +30,33 @@
         <div class="body-message">
           <%# form-horizontal...表示領域の幅に応じて、ラベルとフォーム部品を水平に並べる %>
           <%# form要素のclass属性にform-horizontalを指定する。 %>
-          <form class="form-horizontal">
-            <%# ラベルとフォーム部品を、class属性にform-groupを指定したdiv要素で括る。 %>
+          <%= form_for :growth_record, url: '/growth_curve_sample/create' do |f| %>
+
             <div class="form-group">
               <label class="control-label col-lg-3">月齢</label>
-              <div class="col-lg-6">
-                <input type="text" name="name" class="form-control">
-                <input type="text" name="name" class="form-control">
-              </div>
+              <%= f.text_field :age %>才
             </div>
-            <div class="form-group">
-              <label class="control-label col-lg-3">身長</label>
-              <div class="col-lg-6">
-                <input type="text" name="name" class="form-control">
-              </div>
-            </div>
+
             <div class="form-group">
               <label class="control-label col-lg-3">体重</label>
               <div class="col-lg-6">
-                <input type="text" name="name" class="form-control">
+                <%= f.text_field :weight %>
               </div>
             </div>
+            
+            <div class="form-group">
+              <label class="control-label col-lg-3">身長</label>
+              <div class="col-lg-6">
+                <%= f.text_field :height %>
+              </div>
+            </div>
+
             <div class="form-group">
               <div class="col-lg-4">
-                <button type="button" class="btn btn-warning btn-lg mt-3">記録する</button>
+                <button type="submit" class="btn btn-warning btn-lg mt-3">記録する</button>
               </div>
             </div>
-          </form>
+          <% end %>
         </div>
       </div>
 
