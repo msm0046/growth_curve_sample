@@ -27,7 +27,16 @@ class GrowthCurveSampleController < ApplicationController
 
   def create
     @growth_record = GrowthRecord.new(growth_record_params)
-    @growth_record.save # 保存する
+
+    # flash メッセージの設定
+    if @growth_record.save
+      flash[:success] = 'レコードを作成しました!'
+    else
+      flash[:error] = "レコードを作成できませんでした"
+      flash[:error_messages] = @growth_record.errors.messages
+    end
+
+    redirect_to growth_curve_sample_index_path
   end
 
   private
