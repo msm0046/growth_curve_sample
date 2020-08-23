@@ -47,13 +47,13 @@
         <div class="body-message">
           <%# form-horizontal...表示領域の幅に応じて、ラベルとフォーム部品を水平に並べる %>
           <%# form要素のclass属性にform-horizontalを指定する。 %>
-          <%= form_for @growth_record, url: {action: "index"} do |f| %>
+          <%= form_for :growth_record, url: '/growth_curve_sample/create', class: 'form-horizontal' do |f| %>
 
             <div class="form-group">
               <label class="control-label col-lg-3">月齢</label>
               <div class="col-lg-6">
-                <%= f.text_field :age %>才
-                <%= f.text_field :age_of_the_moon %>ヶ月
+                <%= f.text_field :age %><input id="unit-display__age" type="text" disabled="true" value="才">
+                <%= f.text_field :age_of_the_moon %><input id="unit-display__age_of_the_moon" type="text" disabled="true" value="ヶ月">
               </div>
             </div>
 
@@ -61,6 +61,7 @@
               <label class="control-label col-lg-3">体重</label>
               <div class="col-lg-6">
                 <%= f.text_field :weight %>
+                <input id="unit-display__weight" type="text" disabled="true" value="kg">
               </div>
             </div>
 
@@ -68,6 +69,7 @@
               <label class="control-label col-lg-3">身長</label>
               <div class="col-lg-6">
                 <%= f.text_field :height %>
+                <input id="unit-display__height" type="text" disabled="true" value="cm">
               </div>
             </div>
 
