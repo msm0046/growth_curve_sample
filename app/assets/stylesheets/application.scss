@@ -15,3 +15,59 @@
 
 // Custom bootstrap variables must be set or imported *before* bootstrap.
 @import "bootstrap";
+
+// NOTE: Bootstrap よりもスタイル指定詳細度を上げるため、各要素を ID で指定している
+#unit-display__age_of_the_moon, /* ヶ月 */
+#unit-display__age,             /*   才 */
+#unit-display__weight,          /*   kg */
+#unit-display__height {         /*   cm */
+  padding: 0;
+  text-align: right;
+  border: 0px;
+  border-left: 1px solid gray;
+  width: 36px;
+  margin: 0 0 0 -37px;
+  background: #F0F0F0;
+}
+
+#unit-display__age {
+  padding: 0 7px 0 8px;
+}
+
+#unit-display__age_of_the_moon {
+}
+
+#unit-display__weight,
+#unit-display__height {
+  width: 34px;
+  margin: 0 0 0 -36px;
+  padding: 0 6px 0 3px;
+}
+
+#unit-display__weight {
+}
+
+#unit-display__height {
+  padding: 0 5px 0 4px;
+}
+
+#growth_record_age,
+#growth_record_age_of_the_moon,
+#growth_record_weight,
+#growth_record_height {
+  margin-right: -0.1rem;
+  text-align: right;
+  padding: 0;
+  margin: 0;
+  padding-right: 1.9rem;
+}
+#growth_record_age,
+#growth_record_age_of_the_moon {
+  padding-right: 33px;
+}
+#growth_record_weight,
+#growth_record_height {
+  padding-right: 2.1rem;
+}
+#growth_record_height {
+}
