@@ -12,18 +12,24 @@ GrowthRecord.destroy_all
 growth_record_params = {
   height: 20.1,
   weight: 2.0,
-  age: 0, # NOTE: 年齢は変更対象にしない
+  age: 0,
   age_of_the_moon: 0
 }
 
-# GrowthRecord を 12ヶ月分作成
-12.times do |i|
-  # サンプル成長記録なので単純に加算させる
-  growth_record_params[:height] += 3.0
-  growth_record_params[:weight] += 0.5
-  growth_record_params[:age_of_the_moon] += 1
+# 0才から6才までのデータを作成
+6.times do
+  # GrowthRecord を 12ヶ月分作成
+  12.times do
+    GrowthRecord.create!(
+      growth_record_params
+    )
 
-  GrowthRecord.create!(
-    growth_record_params
-  )
+    # サンプル成長記録なので単純に加算させる
+    growth_record_params[:height] += 1.5
+    growth_record_params[:weight] += 0.5
+    growth_record_params[:age_of_the_moon] += 1
+  end
+
+  growth_record_params[:age_of_the_moon] = 0
+  growth_record_params[:age] += 1
 end
