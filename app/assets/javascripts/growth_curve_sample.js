@@ -10,7 +10,7 @@ window.draw_graph = function () {
     // データ
     data: {
       // X軸ラベル
-      labels: [...Array(13).keys()].map(i => { return i + 'ヶ月' }), // 0 〜 12ヶ月
+      labels: gon.xLabels, // n才 mヶ月
       // データ設定
       datasets: [
         {
@@ -62,10 +62,10 @@ window.draw_graph = function () {
             position: "left",
             // 表示設定
             display: true,
-            // 最大値最初値設定
+            // 最大値・最小値設定
             ticks: {
-              min: 40,
-              max: 80,
+              min: gon.minHeight,
+              max: gon.maxHeight,
               stepSize: 5,
               callback: (value, _index, _values) => { return value + 'cm' }
             },
@@ -80,8 +80,8 @@ window.draw_graph = function () {
             display: true,
             // 最大値最初値設定
             ticks: {
-              min: 1,
-              max: 12,
+              min: gon.minWeight,
+              max: gon.maxWeight,
               stepSize: 1,
               callback: (value, _index, _values) => { return value + 'kg' }
             },

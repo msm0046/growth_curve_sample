@@ -1,15 +1,34 @@
 class GrowthCurveSampleController < ApplicationController
   BORDER_COLOR_RED  = 'rgba(255,   0,   0, 1)'.freeze
   BORDER_COLOR_BLUE = 'rgba( 54, 162, 235, 1)'.freeze
+  AGE_SLIDE = 3.freeze # NOTE: GrowthCurveSampleHelper にも定数定義あり
 
   def index
-    @growth_records = GrowthRecord.all
+    params[:current_set_age] ||= AGE_SLIDE # データ未定義の場合 定数値を代入
+
+    # 「n才〜m才」の表示に利用
+    @current_min_age, *_, @current_max_age = age_range(params[:current_set_age]).to_a
+
+    @growth_records =
+      GrowthRecord.where(age: age_range(params[:current_set_age]))
+                  .order(:age_of_the_moon)
+                  .reorder(:age)
+
     # TODO: 特定の子供だけの情報に絞り込んで、情報を取得する
+
+    @max_age = GrowthRecord.maximum(:age)
 
     gon_set_values = {
       # 身長・体重のマッピング
       height: @growth_records.map(&:height),
       weight: @growth_records.map(&:weight),
+      # 身長・体重のスケールを設定
+      minHeight: GrowthRecord.minimum(:height),
+      maxHeight: GrowthRecord.maximum(:height),
+      maxWeight: GrowthRecord.maximum(:weight),
+      minWeight: GrowthRecord.minimum(:weight),
+      # 「n才mヶ月」のラベル設定
+      xLabels: x_labels(@growth_records),
       # 描画色の設定
       borderRed: BORDER_COLOR_RED,
       borderBlue: BORDER_COLOR_BLUE
@@ -43,6 +62,21 @@ class GrowthCurveSampleController < ApplicationController
 
   def set_gon_variable_as(key:, value:)
     gon.public_send("#{key}=", value)
+  end
+
+  # chart.js x軸ラベルを生成
+  def x_labels(growth_records)
+    growth_records.map { |record| "#{record.age}才#{record.age_of_the_moon}ヶ月" }
+  end
+
+  # 3年間を一区切りに、データを表示させる範囲を生成
+  def age_range(current_max_age)
+    case current_max_age.to_i
+    when 0..(AGE_SLIDE - 1)
+      0..AGE_SLIDE
+    else
+      (current_max_age.to_i - AGE_SLIDE)..current_max_age.to_i
+    end
   end
 
   def growth_record_params
