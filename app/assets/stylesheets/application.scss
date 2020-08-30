@@ -71,3 +71,14 @@
 }
 #growth_record_height {
 }
+
+#growth_record__edit {
+  position: relative;
+  border-collapse: collapse;
+}
+
+#growth-record__edit thead tr th {
+  background: #FEFEFE;
+  position: sticky;
+  top: 0;
+}

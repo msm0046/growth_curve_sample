@@ -27,4 +27,24 @@ module GrowthCurveSampleHelper
     concat( "#{@current_min_age}才 〜 #{@current_max_age}才")
     concat(age_slide_link(direction: :next))
   end
+
+  # 年齢別にグループ分けをした growth_records を生成
+  # { n才 => [a, b, c, ...], m才 => [w, x, y, ...]... }
+  # <table/> データの生成に利用
+  def grouped_by_age(growth_records)
+    age_range =
+      (growth_records.first.age..
+       growth_records.last.age).to_a
+
+    age_group = {}
+
+    # キー値を初期化
+    age_range.each { |age| age_group.update(age.to_s => []) }
+
+    growth_records.each do |growth_record|
+      age_group[growth_record.age.to_s] << growth_record
+    end
+
+    age_group
+  end
 end

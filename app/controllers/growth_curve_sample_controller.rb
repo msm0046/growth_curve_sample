@@ -42,8 +42,6 @@ class GrowthCurveSampleController < ApplicationController
     @growth_record = GrowthRecord.new
   end
 
-  # TODO: CRUD の残りの部分を作成
-
   def create
     @growth_record = GrowthRecord.new(growth_record_params)
 
@@ -56,6 +54,30 @@ class GrowthCurveSampleController < ApplicationController
     end
 
     redirect_to growth_curve_sample_index_path
+  end
+
+  def edit
+    @growth_records =
+      GrowthRecord.all
+                  .reorder(:age)
+                  .order(:age_of_the_moon)
+  end
+
+  def update
+    @growth_record = GrowthRecord.find(params[:id])
+
+    if @growth_record.update(growth_record_params)
+      redirect_to growth_curve_sample_edit_path
+    else
+      render growth_curve_sample_edit_path
+    end
+  end
+
+  def destroy
+    @growth_record = GrowthRecord.find(params[:id])
+    @growth_record.destroy
+
+    redirect_to growth_curve_sample_edit_path
   end
 
   private

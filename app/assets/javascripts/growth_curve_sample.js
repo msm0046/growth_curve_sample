@@ -95,3 +95,85 @@ window.draw_graph = function () {
     },
   });
 };
+
+// テーブルの <td/> から値を取得することを想定
+// [編集], [削除] ボタンを押した行の値を取得
+function getTableDataElementValue(context, name) {
+  return (
+    context.parentElement
+           .parentElement
+           .querySelector(''.concat('span.js-', name))
+           .innerHTML
+  );
+}
+
+// NOTE: set 系で再利用するので keys の順序は要固定
+function getTableRowValues(context) {
+  keys = ['id', 'height', 'weight', 'age_of_the_moon', 'age'];
+
+  return (
+    keys.map(key => { return getTableDataElementValue(context, key) })
+  );
+}
+
+// [編集] ボタンで表示されるモーダルに値をセット
+function setModalFormElementValue(prefix, name, value) {
+  var target =
+    document.querySelector(''.concat('#growth_record__', prefix, '-', name));
+
+  target.value = value;
+}
+
+// [編集] ボタンを押したテーブル行の値をモーダルに転写
+function transcribeTableDataToEditModalForm() {
+  setModalFormElementValues('edit', getTableRowValues(this))
+}
+
+// [削除] ボタンを押したテーブル行の値をモーダルに転写
+function transcribeTableDataToDeleteModalForm() {
+  setModalFormElementValues('delete', getTableRowValues(this))
+}
+
+// テーブルの行から取得した値をモーダルに転写
+function setModalFormElementValues(prefix, targetValues) {
+  [id, height, weight, ageOfTheMoon, age] = targetValues;
+
+  setModalFormElementValue(prefix, 'id', id);
+  setModalFormElementValue(prefix, 'height', height);
+  setModalFormElementValue(prefix, 'weight', weight);
+  setModalFormElementValue(prefix, 'age_of_the_moon', ageOfTheMoon);
+  setModalFormElementValue(prefix, 'age', age);
+}
+
+//
+// onClick イベント設定
+// [編集] ボタンにモーダルへの値の転写機能を付与
+//
+function setModalFromFormValuesOnClick(element) {
+  element.addEventListener('click', transcribeTableDataToEditModalForm)
+}
+
+//
+// onClick イベント設定
+// [削除] ボタンにモーダルへの値の転写機能を付与
+//
+function setDeleteModalFromValuesOnClick(element) {
+  element.addEventListener('click', transcribeTableDataToDeleteModalForm)
+}
+
+// ボタンクリックで data 属性値にある要素を対象に submit を実行
+// data 属性値は <form/> の ID 指定を期待 (#some-form-name)
+function formSubmit(context) {
+  document.querySelector(context.dataset.submitFormTarget).submit();
+}
+
+// イベント処理の初期化
+document.addEventListener('turbolinks:load', function() {
+  // [編集] ボタンを押したときのモーダルへの値転写機能
+  Array.from(document.querySelectorAll('.js-growth_record__edit'))
+       .map((elm) => { setModalFromFormValuesOnClick(elm); });
+
+  // [削除] ボタンを押したときのモーダルへの値転写機能
+  Array.from(document.querySelectorAll('.js-growth_record__delete'))
+       .map((elm) => { setDeleteModalFromValuesOnClick(elm); });
+});
