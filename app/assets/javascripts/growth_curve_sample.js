@@ -116,7 +116,7 @@ function getTableRowValues(context) {
   );
 }
 
-// [編集] ボタンで表示されるモーダルに値をセット
+// [編集], [削除] ボタンで表示されるモーダルに値をセット
 function setModalFormElementValue(prefix, name, value) {
   var target =
     document.querySelector(''.concat('#growth_record__', prefix, '-', name));
