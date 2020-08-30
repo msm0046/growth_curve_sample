@@ -1,16 +1,14 @@
 <div class="container">
   <div class="row">
-    <h1 class="sticky">成長記録 編集</h1>
-  </div>
-  <div class="row">
+    <h1 class="sticky w-100 bg-white">成長記録 編集</h1>
     <table id="growth-record__edit" class="table table-striped">
       <% grouped_by_age(@growth_records).each do |key, values| %>
         <thead>
           <tr>
-            <th><%= "#{key}才" %></th>
-            <th class="text-center">身長</th>
-            <th class="text-center">体重</th>
-            <th class="text-right">操作</th>
+            <th class="bg-white"><%= "#{key}才" %></th>
+            <th class="bg-white text-center">身長</th>
+            <th class="bg-white text-center">体重</th>
+            <th class="bg-white text-right">操作</th>
           </tr>
           </th>
           <tbody>

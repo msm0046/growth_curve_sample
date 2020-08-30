@@ -78,7 +78,11 @@
 }
 
 #growth-record__edit thead tr th {
-  background: #FEFEFE;
+  position: sticky;
+  top: 47px;
+}
+
+.sticky {
   position: sticky;
   top: 0;
 }
