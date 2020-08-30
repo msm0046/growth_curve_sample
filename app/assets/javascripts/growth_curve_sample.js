@@ -149,7 +149,7 @@ function setModalFormElementValues(prefix, targetValues) {
 // onClick イベント設定
 // [編集] ボタンにモーダルへの値の転写機能を付与
 //
-function setModalFromFormValuesOnClick(element) {
+function setEditModalFromFormValuesOnClick(element) {
   element.addEventListener('click', transcribeTableDataToEditModalForm)
 }
 
@@ -171,7 +171,7 @@ function formSubmit(context) {
 document.addEventListener('turbolinks:load', function() {
   // [編集] ボタンを押したときのモーダルへの値転写機能
   Array.from(document.querySelectorAll('.js-growth_record__edit'))
-       .map((elm) => { setModalFromFormValuesOnClick(elm); });
+       .map((elm) => { setEditModalFromFormValuesOnClick(elm); });
 
   // [削除] ボタンを押したときのモーダルへの値転写機能
   Array.from(document.querySelectorAll('.js-growth_record__delete'))
