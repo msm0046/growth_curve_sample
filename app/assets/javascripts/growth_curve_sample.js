@@ -160,10 +160,10 @@ class TranscribeEventRegistrar{
       ['.js-growth_record__edit', this._transcribeTableDataToEditModalForm],
       ['.js-growth_record__delete', this._transcribeTableDataToDeleteModalForm]
     ].forEach(([selector, method]) => {
-      Array.from(document.querySelectorAll(selector))
-           .map((elm) => {
-             elm.addEventListener('click', method)
-           });
+      document.querySelectorAll(selector)
+              .forEach((elm) => {
+                elm.addEventListener('click', method)
+              });
     })
   }
 
