@@ -24,8 +24,10 @@ module GrowthCurveSampleHelper
 
   # 「< n才〜m才 >」の表示とその年齢操作リンクを生成する
   def age_slider
-    concat(age_slide_link(direction: :prev))
-    concat( "#{@current_min_age}才 〜 #{@current_max_age}才")
-    concat(age_slide_link(direction: :next))
+    [
+      age_slide_link(direction: :prev),
+       "#{@current_min_age}才 〜 #{@current_max_age}才",
+      age_slide_link(direction: :next)
+    ].each(&method(:concat))
   end
 end
