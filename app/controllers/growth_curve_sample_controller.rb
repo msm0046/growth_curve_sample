@@ -1,14 +1,15 @@
 class GrowthCurveSampleController < ApplicationController
   BORDER_COLOR_RED  = 'rgba(255,   0,   0, 1)'.freeze
   BORDER_COLOR_BLUE = 'rgba( 54, 162, 235, 1)'.freeze
-  AGE_SLIDE = 3.freeze # NOTE: GrowthCurveSampleHelper にも定数定義あり
+  AGE_SLIDE = 3 # NOTE: GrowthCurveSampleHelper にも定数定義あり
 
   def index
     params[:current_set_age] ||= AGE_SLIDE # データ未定義の場合 定数値を代入
+    # スプラットオペレータ
+    @current_min_age, *_middle_values, @current_max_age = age_range(params[:current_set_age]).to_a
 
-    # 「n才〜m才」の表示に利用
-    @current_min_age, *_, @current_max_age = age_range(params[:current_set_age]).to_a
-
+    # order(:age_of_the_moon)指定がない場合は、昇順の値を取得する
+    # reorder(:age)もう一度、並べ替え
     @growth_records =
       GrowthRecord.where(age: age_range(params[:current_set_age]))
                   .order(:age_of_the_moon)
@@ -16,6 +17,8 @@ class GrowthCurveSampleController < ApplicationController
 
     # TODO: 特定の子供だけの情報に絞り込んで、情報を取得する
 
+    # growth_curve_sample.helperで使用
+    # ageカラムの最大値を取得する
     @max_age = GrowthRecord.maximum(:age)
 
     gon_set_values = {
@@ -51,7 +54,7 @@ class GrowthCurveSampleController < ApplicationController
     if @growth_record.save
       flash[:success] = 'レコードを作成しました!'
     else
-      flash[:error] = "レコードを作成できませんでした"
+      flash[:error] = 'レコードを作成できませんでした'
       flash[:error_messages] = @growth_record.errors.messages
     end
 
