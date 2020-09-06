@@ -1,0 +1,144 @@
+<div class="container">
+  <div class="row">
+    <h1 class="sticky w-100 bg-white">成長記録 編集</h1>
+    <table id="growth-record__edit" class="table table-striped">
+      <% grouped_by_age(@growth_records).each do |key, values| %>
+        <thead>
+          <tr>
+            <th class="bg-white"><%= "#{key}才" %></th>
+            <th class="bg-white text-center">身長</th>
+            <th class="bg-white text-center">体重</th>
+            <th class="bg-white text-right">操作</th>
+          </tr>
+          </th>
+          <tbody>
+            <% values.each do |growth_record| %>
+              <tr>
+                <td
+                  class="text-right align-middle js-age_of_the_moon"
+                  title="<%= "#{growth_record.age}才#{growth_record.age_of_the_moon}ヶ月"%>">
+                  <span class="js-id" style="display:none;"><%=growth_record.id %></span>
+                  <span class="js-age" style="display:none;"><%= growth_record.age %></span>
+                  <span class="js-age_of_the_moon"><%= growth_record.age_of_the_moon %></span>
+                  ヶ月
+                </td>
+                <td class="text-right align-middle js-height">
+                  <span class="js-height"><%= growth_record.height %></span>
+                  cm
+                </td>
+                <td class="text-right align-middle js-weight">
+                  <span class="js-weight"><%= growth_record.weight %></span>
+                  kg
+                </td>
+                <td class="text-right align-middle">
+                  <button
+                    data-toggle="modal"
+                    data-target="#growth-record-edit__edit_modal"
+                    class="btn btn-secondary js-growth_record__edit">
+                    編集
+                  </button>
+                  <button
+                    data-toggle="modal"
+                    data-target="#growth-record-edit__delete_modal"
+                    class="btn btn-danger js-growth_record__delete">
+                    削除
+                  </button>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        <% end %>
+    </table>
+  </div>
+</div>
+
+<div id="growth-record-edit__edit_modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">記録の編集</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= form_tag(growth_curve_sample_update_path, id: 'growth_record__edit-form', class: 'form') do -%>
+          <%= text_field_tag(:id, '', id: 'growth_record__edit-id', type: 'hidden') %>
+            <div class="form-group">
+              <label class="control-label col-lg-3">月齢</label>
+              <div class="col-lg-6">
+                <%= text_field_tag('growth_record[age]', '', id: 'growth_record__edit-age') %><input id="unit-display__age" type="text" disabled="true" value="才">
+                <%= text_field_tag('growth_record[age_of_the_moon]', '', id: 'growth_record__edit-age_of_the_moon') %><input id="unit-display__age_of_the_moon" type="text" disabled="true" value="ヶ月">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-lg-3">体重</label>
+              <div class="col-lg-6">
+                <%= text_field_tag('growth_record[weight]', '', id: 'growth_record__edit-weight') %>
+                <input id="unit-display__weight" type="text" disabled="true" value="kg">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-lg-3">身長</label>
+              <div class="col-lg-6">
+                <%= text_field_tag('growth_record[height]', '', id: 'growth_record__edit-height') %>
+                <input id="unit-display__height" type="text" disabled="true" value="cm">
+              </div>
+            </div>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-submit-form-target="#growth_record__edit-form" onclick="formSubmit(this)">更新する</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="growth-record-edit__delete_modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">記録の削除</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>この記録を削除しますか？</p>
+        <%= form_tag(growth_curve_sample_destroy_path, id: 'growth_record__delete-form', class: 'form') do -%>
+          <%= text_field_tag(:id, '', id: 'growth_record__delete-id', type: 'hidden') %>
+            <div class="form-group">
+              <label class="control-label col-lg-3">月齢</label>
+              <div class="col-lg-6">
+                <%= text_field_tag('growth_record[age]', '', id: 'growth_record__delete-age') %><input id="unit-display__age" type="text" disabled="true" value="才">
+                <%= text_field_tag('growth_record[age_of_the_moon]', '', id: 'growth_record__delete-age_of_the_moon') %><input id="unit-display__age_of_the_moon" type="text" disabled="true" value="ヶ月">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-lg-3">体重</label>
+              <div class="col-lg-6">
+                <%= text_field_tag('growth_record[weight]', '', id: 'growth_record__delete-weight') %>
+                <input id="unit-display__weight" type="text" disabled="true" value="kg">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-lg-3">身長</label>
+              <div class="col-lg-6">
+                <%= text_field_tag('growth_record[height]', '', id: 'growth_record__delete-height') %>
+                <input id="unit-display__height" type="text" disabled="true" value="cm">
+              </div>
+            </div>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-submit-form-target="#growth_record__delete-form" onclick="formSubmit(this)">削除する</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+      </div>
+    </div>
+  </div>
+</div>

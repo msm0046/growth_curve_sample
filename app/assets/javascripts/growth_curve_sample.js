@@ -95,3 +95,104 @@ window.draw_graph = function () {
     },
   });
 };
+
+// growth_curve_sample/edit での使用を想定
+// 1. <table/> に表示される [編集], [削除] ボタンをクリック
+// 2. 当該行の「年齢」「月齢」「体重」「身長」をモーダルに転写
+class TableModalTranscriber {
+  // context = 別の場所の this
+  constructor(context, targetPrefix) {
+    this.context = context;
+    this.targetPrefix = targetPrefix;
+  }
+
+  transcribe() {
+    this._setModalFormElementValues();
+  }
+
+  // [編集], [削除] ボタンのある行から指定した名前の値を取得
+  _getTableRowValue(name) {
+    return (
+      this.context.parentElement
+                  .parentElement
+                  .querySelector(''.concat('span.js-', name))
+                  .innerHTML
+    );
+  }
+
+  _getTableRowValues() {
+    // NOTE: set 系で再利用するので keys の順序は要固定
+    let keys = ['id', 'height', 'weight', 'age_of_the_moon', 'age'];
+
+    return (
+      keys.map(key => { return this._getTableRowValue(key) })
+    );
+  }
+
+  // 指定した名前の要素に値をセット
+  _setModalFormElementValue(name, value) {
+    var target =
+      document.querySelector(
+        ''.concat('#growth_record__', this.targetPrefix, '-', name)
+      );
+
+    target.value = value;
+  }
+
+  // [編集], [削除] ボタンで表示されるモーダルに値をセット
+  _setModalFormElementValues() {
+    let [id, height, weight, ageOfTheMoon, age] = this._getTableRowValues();
+
+    this._setModalFormElementValue('id', id);
+    this._setModalFormElementValue('height', height);
+    this._setModalFormElementValue('weight', weight);
+    this._setModalFormElementValue('age_of_the_moon', ageOfTheMoon);
+    this._setModalFormElementValue('age', age);
+  }
+}
+
+// growth_curve_sample/edit での使用を想定
+// 当該 <button/> 要素に、Click イベントに対して TableModalTranscriber クラスの機能を付与
+class TranscribeEventRegistrar{
+  register() {
+    // [編集], [削除] ボタンを押したときのモーダルへの値転写機能を付与
+    [
+      ['.js-growth_record__edit', this._transcribeTableDataToEditModalForm],
+      ['.js-growth_record__delete', this._transcribeTableDataToDeleteModalForm]
+    ].forEach(([selector, method]) => {
+      document.querySelectorAll(selector)
+              .forEach((elm) => {
+                elm.addEventListener('click', method)
+              });
+    })
+  }
+
+  // イベント登録用メソッド
+  // [編集] ボタンを押したテーブル行の値をモーダルに転写
+  _transcribeTableDataToEditModalForm() {
+    var transcriber = new TableModalTranscriber(this, 'edit')
+
+    transcriber.transcribe();
+  }
+
+  // イベント登録用メソッド
+  // [削除] ボタンを押したテーブル行の値をモーダルに転写
+  _transcribeTableDataToDeleteModalForm() {
+    var transcriber = new TableModalTranscriber(this, 'delete')
+
+    transcriber.transcribe();
+  }
+}
+
+// ボタンクリックで data 属性値にある要素を対象に submit を実行
+// data 属性値は <form/> の ID 指定を期待 (#some-form-name)
+function formSubmit(context) {
+  document.querySelector(context.dataset.submitFormTarget).submit();
+}
+
+// イベント処理の初期化
+document.addEventListener('turbolinks:load', function() {
+  // [編集], [削除] ボタンを押したときのモーダルへの値転写機能を付与
+  let eventRegistrar = new TranscribeEventRegistrar();
+  eventRegistrar.register();
+});
