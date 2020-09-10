@@ -6,19 +6,23 @@ module GrowthCurveSampleHelper
   # 表示可能なデータ範囲を超えそうになった時、リンクではなくただの文字列を表示させる
   # NOTE: グラフの再描画時、キャッシュから旧い値が採用されてしまうため、リンク生成時に turbolinks を一時的に off にしている
   def age_slide_link(direction:)
+    prev_cond = (0..AGE_SLIDE).cover?(@current_max_age)
+    next_cond = params[:current_set_age].to_i > @max_age
+
+    a_link_or_text =
+      lambda do |char, cond, calc_mark|
+        if cond
+          char
+        else
+          tag.a(char, href: growth_curve_sample_index_path(current_set_age: @current_max_age.to_i.public_send(calc_mark, AGE_SLIDE)), data: { turbolinks: false })
+        end
+      end
+
     case direction
     when :prev
-      if (0..AGE_SLIDE).cover?(@current_max_age)
-        '<'
-      else
-        tag.a('<', href: growth_curve_sample_index_path(current_set_age: @current_max_age.to_i - AGE_SLIDE), data: { turbolinks: false })
-      end
+      a_link_or_text.call('<', prev_cond, :-)
     when :next
-      if params[:current_set_age].to_i > @max_age
-        '>'
-      else
-        tag.a('>', href: growth_curve_sample_index_path(current_set_age: @current_max_age.to_i + AGE_SLIDE), data: { turbolinks: false })
-      end
+      a_link_or_text.call('>', next_cond, :+)
     end
   end
 
