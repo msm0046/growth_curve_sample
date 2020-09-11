@@ -141,13 +141,19 @@ class TableModalTranscriber {
 
   // [編集], [削除] ボタンで表示されるモーダルに値をセット
   _setModalFormElementValues() {
-    let [id, height, weight, ageOfTheMoon, age] = this._getTableRowValues();
+    let rowValues = function (context) {
+      let keys = ['id', 'height', 'weight', 'age_of_the_moon', 'age'];
+      let values = context._getTableRowValues();
 
-    this._setModalFormElementValue('id', id);
-    this._setModalFormElementValue('height', height);
-    this._setModalFormElementValue('weight', weight);
-    this._setModalFormElementValue('age_of_the_moon', ageOfTheMoon);
-    this._setModalFormElementValue('age', age);
+      // {key: value} の生成
+      return Object.fromEntries(keys.map((_v, i) => [keys[i], values[i]]));
+    }(this);
+
+    let self = this;
+
+    Object.keys(rowValues).forEach(key => {
+      self._setModalFormElementValue(key, rowValues[key]);
+    })
   }
 }
 
@@ -160,10 +166,7 @@ class TranscribeEventRegistrar{
       ['.js-growth_record__edit', this._transcribeTableDataToEditModalForm],
       ['.js-growth_record__delete', this._transcribeTableDataToDeleteModalForm]
     ].forEach(([selector, method]) => {
-      document.querySelectorAll(selector)
-              .forEach((elm) => {
-                elm.addEventListener('click', method)
-              });
+      this._registerEvent(selector, method);
     })
   }
 
@@ -181,6 +184,13 @@ class TranscribeEventRegistrar{
     var transcriber = new TableModalTranscriber(this, 'delete')
 
     transcriber.transcribe();
+  }
+
+  _registerEvent(selector, method) {
+    document.querySelectorAll(selector)
+      .forEach((elm) => {
+        elm.addEventListener('click', method)
+      });
   }
 }
 
