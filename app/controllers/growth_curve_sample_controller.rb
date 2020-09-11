@@ -1,7 +1,7 @@
 class GrowthCurveSampleController < ApplicationController
   BORDER_COLOR_RED  = 'rgba(255,   0,   0, 1)'.freeze
   BORDER_COLOR_BLUE = 'rgba( 54, 162, 235, 1)'.freeze
-  AGE_SLIDE = 3.freeze # NOTE: GrowthCurveSampleHelper にも定数定義あり
+  AGE_SLIDE = 3 # NOTE: GrowthCurveSampleHelper にも定数定義あり
 
   def index
     # TODO: 特定の子供だけの情報に絞り込んで、情報を取得する
@@ -23,7 +23,7 @@ class GrowthCurveSampleController < ApplicationController
     if @growth_record.save
       flash[:success] = 'レコードを作成しました!'
     else
-      flash[:error] = "レコードを作成できませんでした"
+      flash[:error] = 'レコードを作成できませんでした'
       flash[:error_messages] = @growth_record.errors.messages
     end
 
