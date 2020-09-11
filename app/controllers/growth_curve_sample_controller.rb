@@ -4,45 +4,16 @@ class GrowthCurveSampleController < ApplicationController
   AGE_SLIDE = 3 # NOTE: GrowthCurveSampleHelper にも定数定義あり
 
   def index
-    params[:current_set_age] ||= AGE_SLIDE # データ未定義の場合 定数値を代入
-    # スプラットオペレータ
-    @current_min_age, *_middle_values, @current_max_age = age_range(params[:current_set_age]).to_a
-
-    # order(:age_of_the_moon)指定がない場合は、昇順の値を取得する
-    # reorder(:age)もう一度、並べ替え
+    # TODO: 特定の子供だけの情報に絞り込んで、情報を取得する
     @growth_records =
       GrowthRecord.where(age: age_range(params[:current_set_age]))
                   .order(:age_of_the_moon)
                   .reorder(:age)
 
-    # TODO: 特定の子供だけの情報に絞り込んで、情報を取得する
-
-    # growth_curve_sample.helperで使用
-    # ageカラムの最大値を取得する
-    @max_age = GrowthRecord.maximum(:age)
-
-    gon_set_values = {
-      # 身長・体重のマッピング
-      height: @growth_records.map(&:height),
-      weight: @growth_records.map(&:weight),
-      # 身長・体重のスケールを設定
-      minHeight: GrowthRecord.minimum(:height),
-      maxHeight: GrowthRecord.maximum(:height),
-      maxWeight: GrowthRecord.maximum(:weight),
-      minWeight: GrowthRecord.minimum(:weight),
-      # 「n才mヶ月」のラベル設定
-      xLabels: x_labels(@growth_records),
-      # 描画色の設定
-      borderRed: BORDER_COLOR_RED,
-      borderBlue: BORDER_COLOR_BLUE
-    }
-
-    gon_set_values.each do |key, value|
-      set_gon_variable_as(key: key, value: value)
-    end
-
     # index にフォームを書くので ここで new する
     @growth_record = GrowthRecord.new
+
+    init_draw_graph_dependencies(@growth_records)
   end
 
   def create
@@ -85,6 +56,45 @@ class GrowthCurveSampleController < ApplicationController
 
   private
 
+  # chart.js でのグラフ描画に必要な値のセットや設定を実行
+  def init_draw_graph_dependencies(growth_records)
+    @max_age = GrowthRecord.maximum(:age)
+
+    init_age_slide_control_variables
+    set_gon_variables(growth_records)
+  end
+
+  # クエリパラメータをもとに、「< n才〜m才 >」を表示させるヘルパーメソッドで利用
+  def init_age_slide_control_variables
+    params[:current_set_age] ||= AGE_SLIDE # データ未定義の場合 定数値を代入
+
+    # 「n才〜m才」の表示に利用
+    @current_min_age, *_, @current_max_age = age_range(params[:current_set_age]).to_a
+  end
+
+  def set_gon_variables(growth_records)
+    gon_set_values = {
+      # 身長・体重のマッピング
+      height: growth_records.map(&:height),
+      weight: growth_records.map(&:weight),
+      # 身長・体重のスケールを設定
+      minHeight: GrowthRecord.minimum(:height),
+      maxHeight: GrowthRecord.maximum(:height),
+      maxWeight: GrowthRecord.maximum(:weight),
+      minWeight: GrowthRecord.minimum(:weight),
+      # 「n才mヶ月」のラベル設定
+      xLabels: x_labels(growth_records),
+      # 描画色の設定
+      borderRed: BORDER_COLOR_RED,
+      borderBlue: BORDER_COLOR_BLUE
+    }
+
+    gon_set_values.each do |key, value|
+      set_gon_variable_as(key: key, value: value)
+    end
+  end
+
+  # key, value を「gon.variable_name = value」形式に変換して実行
   def set_gon_variable_as(key:, value:)
     gon.public_send("#{key}=", value)
   end
